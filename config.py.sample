@@ -1,0 +1,38 @@
+#!/bin/python
+
+#########################
+## hack.chat config
+#########################
+# Name of hack.chat channel
+CHANNEL         = "sometestchannel"
+# Username to be used the the HC bot
+USER            = "testuser"
+# Password used for tripcode generation
+PASS            = "5azniuJ2m8BxYX9x2w8oRDVs"
+
+#########################
+## Telegram config
+#########################
+# API token for the Telegram bot (you get this from @BotFather)
+API_TOKEN  = "---"
+# ID of chat between your TG account and the TG bot
+# The TG bot will reject anyone else trying to message it and only listen on
+# your 1-to-1 chat with it
+# To get your chat ID, enter the API token above, run telegrambot.py
+# (not control.py) and start a chat with your bot on Telegram.
+# The bot will reply with the CHAT_ID on Telegram when you send /start.
+CHAT_ID    = -1
+
+#########################
+## Miscellaneous
+#########################
+# Amount of seconds to wait before trying to reconnect
+RECONNECT_DELAY = 30
+# Name of logfile
+LOG_FILENAME    = "log-%s.log" % CHANNEL
+
+#########################
+## Auto-generated values
+## DO NOT CHANGE!
+#########################
+USER_AND_PASS   = "%s#%s" % (USER, PASS)
