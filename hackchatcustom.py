@@ -30,6 +30,8 @@ class HackChat:
         self.on_message = []
         self.on_join = []
         self.on_leave = []
+        self.on_emote = []
+        self.on_invite = []
 
         self.stopped = False
 
@@ -107,6 +109,13 @@ class HackChat:
         elif result["cmd"] == "onlineSet":
             for nick in result["nicks"]:
                 self.online_users.append(nick)
+        elif result["cmd"] == "info":
+            if result["type"] == "emote":
+                for handler in list(self.on_emote):
+                    handler(self, result)
+            elif result["type"] == "invite":
+                for handler in list(self.on_invite):
+                    handler(self, result)
 
     def stop(self):
         """Gracefully stops all bot threads and closes WebSocket connection."""

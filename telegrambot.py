@@ -45,7 +45,7 @@ class TGBot():
         self._updater.bot.send_message(
             chat_id=config.CHAT_ID,
             text=text,
-            parse_mode=telegram.ParseMode.MARKDOWN
+            parse_mode=telegram.ParseMode.HTML
         )
 
     def addCommand(self, command, handler):

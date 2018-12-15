@@ -7,6 +7,7 @@ import threading
 import traceback
 import signal
 import logging
+import html
 
 # Custom scripts
 import hackchatcustom as hackchat
@@ -41,6 +42,9 @@ def mdescape(s):
         s = s.replace(x, "\\" + x)
     return s
 
+def htmlescape(s):
+    return html.escape(s)
+
 ### HV-Bot
 def getUser(update):
     """Convenience function that extracts a nick and tripcode (if any) from
@@ -69,21 +73,34 @@ def onMessage(chat, update):
     log("[%s] %s" % (sender, message))
     if nick != config.USER:
         if trip == 'null':
-            toTG("\\[*%s*] %s" % (mdescape(nick), mdescape(message)))
+            toTG("[<b>%s</b>] %s" % (htmlescape(nick), htmlescape(message)))
         else:
-            toTG("\\[*%s*#%s] %s" % (mdescape(nick), trip, mdescape(message)))
+            toTG("[<b>%s</b>#%s] %s" % (htmlescape(nick), trip, htmlescape(message)))
 
 def onJoin(chat, update):
     """Callback function handling users joining the channel."""
     user = getUser(update)
     log("# %s joined" % user)
-    toTG("# %s joined" % mdescape(user))
+    toTG("# %s joined" % htmlescape(user))
 
 def onLeave(chat, update):
     """Callback function handling users leaving the channel."""
     user = getUser(update)
     log("# %s left" % user)
-    toTG("# %s left" % mdescape(user))
+    toTG("# %s left" % htmlescape(user))
+
+def onEmote(chat, update):
+    """Callback function handling users sending emotes to the channel."""
+    text = update["text"]
+    log("* %s" % text)
+    toTG("* %s" % htmlescape(text))
+
+def onInvite(chat, update):
+    """Callback function handling users sending invite to the bot."""
+    user = update["from"]
+    newChannel = update["invite"]
+    log(">>> %s invited you to hack.chat/?%s" % (user, newChannel))
+    toTG(">>> %s invited you to hack.chat/?%s" % (htmlescape(user), htmlescape(newChannel)))
 
 def startHCBot():
     """Starts the HC bot."""
@@ -92,6 +109,8 @@ def startHCBot():
     bot.on_message  += [onMessage]
     bot.on_join     += [onJoin]
     bot.on_leave    += [onLeave]
+    bot.on_emote    += [onEmote]
+    bot.on_invite   += [onInvite]
     hcBot = bot
     bot.run()
 
@@ -156,7 +175,7 @@ def cmdOnline(bot, update):
     users = list(hcBot.online_users)
     users.sort()
     tgBot.send("Users online:\n%s" %
-                mdescape(", ".join(users)))
+                htmlescape(", ".join(users)))
 
 
 ### Common
